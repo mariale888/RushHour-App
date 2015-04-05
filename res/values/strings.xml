@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RushHour</string>
+    <string name="title_section1">Home</string>
+    <string name="title_section2">Add Trip</string>
+    <string name="title_section3">Calendar</string>
+    
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Rush Hour</string>
+    <string name="action_settings">Settings</string>
+    
+     <!-- Home strings -->
+     <string name="welcome_message">Welcome Back</string>
+     <string name="my_calendar">My Trips of the Day:</string>
+     <string name="name_trip">Trip:</string>
+     <string name="departure_time">Departures:</string>
+     <string name="arrival_time">Arrivals:</string>
+     <string name="edit_button">Edit/Remove</string>
+	 <string name="remove_button">Remove</string>
+	
+   <!-- Add new event to calendar strings -->
+     <string name="final_destination">Final Destination</string>
+     <string name="time_arrival">Time of Arrival</string>
+     <string name="time_departure">Time of Departure</string>
+	 <string name="time_window">Time Window for Arrival:</string>
+	 <string name="add_button">Add</string>
+	 <string name="add_calendar">New Trip:</string>
+	 
+	 
+</resources>

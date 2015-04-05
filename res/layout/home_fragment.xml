@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:paddingBottom="30dp"
+        android:text="@+string/welcome_message"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView1" >
+
+        <RelativeLayout
+            android:id="@+id/RelativeLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TableLayout
+                android:id="@+id/calendar_table_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="31dp"
+                 android:layout_marginLeft="50dp"  
+              
+                android:stretchColumns="0,1,2,3" >
+
+                <TableRow
+                    android:id="@+id/calendar_row"
+             		 >
+
+                     <TextView 
+                        android:text="@+string/name_trip"
+				        android:layout_width="wrap_content"       
+				        android:layout_column="0"
+				        android:layout_weight="1" />
+				        <TextView android:text="@+string/departure_time"
+				        android:layout_width="wrap_content"
+				        android:layout_column="1"
+				        android:layout_weight="0.5" />
+				        <TextView android:text="@+string/arrival_time"
+				        android:layout_width="wrap_content"
+				        android:layout_column="2"
+				        android:layout_weight="0.5" />
+				 		<TextView android:text="@+string/edit_button"
+				        android:layout_width="0dp"
+				        android:layout_column="3"
+				        android:layout_weight="0" >
+				        </TextView> 
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/calendar_table_txtView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingLeft="15dp"
+                android:text="@+string/my_calendar"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+          
+           
+           
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+   
+
+
+ 
+</RelativeLayout>
