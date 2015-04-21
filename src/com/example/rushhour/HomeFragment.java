@@ -14,6 +14,15 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+/*
+ * Fragment that contains users trip.
+ * 
+ *  - list table of current trips
+ *  - capability to edit/delete a trip
+ *  - notification for current trip departure time
+ * 
+ * */
+
 public class HomeFragment extends Fragment {
 	
 	  TableLayout t1;
