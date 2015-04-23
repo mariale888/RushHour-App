@@ -1,3 +1,5 @@
+package com.example.rushhour;
+
 public class SignalAgent
 {
     int signal_ID;

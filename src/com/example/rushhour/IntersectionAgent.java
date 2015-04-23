@@ -1,3 +1,5 @@
+package com.example.rushhour;
+
 public class IntersectionAgent
 {
     int intersection_ID;

@@ -1,6 +1,9 @@
 package com.example.rushhour;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -50,6 +53,8 @@ public class MainActivity extends ActionBarActivity
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
+        new AsyncTaskRushHour().execute("SELECT * FROM nodes WHERE node_id = '34184938'");
+        
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,

@@ -1,31 +1,23 @@
+package com.example.rushhour;
+
 import java.sql.*;
-import java.util.ArrayList;
 
 public class QueryDatabase
 {
-    public ArrayList<ArrayList<String>> getResult(String query)
+    public ResultSet getResult(String query) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException
     {
-	Class.forName("com.mysql.jdbc.Driver");	
-	Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/<Database Name>", "<Username>", "<Password>");
+	Class.forName("com.mysql.jdbc.Driver").newInstance();	
+	Connection connection = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/rushHour", "root", "");
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery(query);
-        ResultSetMetaData metadata = result.getMetaData();
-        int columns = metadata.getColumnCount();
-        ArrayList<ArrayList<String>> resultArray = new ArrayList<ArrayList<String>>();
 
-        while(result.next())
+        if(!query.toLowerCase().substring(0, 6).contains("select"))
         {
-            ArrayList<String> temp = new ArrayList<String>();
-            for(int i=1; i<=columns; i++)
-            {
-                temp.add(result.getString(i));
-            }
-            resultArray.add(temp);
+        	return null;
         }
 	
-	metadata.close();
-	result.close();
 	statement.close();
 	connection.close();
+	return result;
     }
 }
