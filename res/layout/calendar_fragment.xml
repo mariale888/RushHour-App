@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-   android:layout_marginLeft="20dp"   >
+   android:layout_marginLeft="20dp"   xmlns:tools="http://schemas.android.com/tools" tools:context=".CalendarFragment">
 
     <TextView
         android:id="@+id/textView2"
@@ -13,7 +13,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/finalDesText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -25,7 +25,7 @@
     </EditText>
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/arrivalText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -34,7 +34,7 @@
         android:paddingTop="30dp" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/timeDepText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -50,7 +50,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <SeekBar
-        android:id="@+id/seekBar1"
+        android:id="@+id/timeWindowBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="30"
@@ -58,7 +58,7 @@
         android:progress="15" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/addButton"
         style="@drawable/drawer_shadow"
         android:layout_width="98dp"
         android:layout_height="wrap_content"

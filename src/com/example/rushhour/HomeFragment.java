@@ -25,11 +25,11 @@ import android.widget.TextView;
 
 public class HomeFragment extends Fragment {
 	
-	  TableLayout t1;
+	  private TableLayout t1;
 	 
-	  TextView calendar;
-	  TextView edit;
-	  View v;
+	  public TextView calendar;
+	  public TextView edit;
+	  private View v;
 	  
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

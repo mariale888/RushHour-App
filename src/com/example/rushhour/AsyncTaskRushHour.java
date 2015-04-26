@@ -1,6 +1,5 @@
 package com.example.rushhour;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.json.JSONArray;

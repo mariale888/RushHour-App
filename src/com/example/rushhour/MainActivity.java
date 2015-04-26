@@ -1,7 +1,6 @@
 package com.example.rushhour;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
 import java.util.concurrent.ExecutionException;
 
 import org.json.JSONArray;
@@ -10,12 +9,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import elements.Nodes;
 import elements.Ways;
-import android.R.integer;
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -23,7 +20,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -85,6 +81,7 @@ public class MainActivity extends ActionBarActivity
         QUERY     = "QUERY";
         latitude  = 40.4380673;
 	    longitude = -79.9229868;
+	  
 	    
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
