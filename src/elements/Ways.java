@@ -1,26 +1,38 @@
 package elements;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Ways extends Elements {
 
-	private HashSet<Nodes> nodeList;
+	private List<Nodes> nodeList;
 	
 	// Constructors and getters.
 	public Ways(){
-		id  = 0;
+		id  = (long) 0;
 		tag = "";
-		nodeList = new HashSet<Nodes>();
+		nodeList = new ArrayList<Nodes>();
 	}
-	public Ways(int id_,HashSet<Nodes>  nlist_, String tag_)
+	public Ways(Long id_, List<Nodes> nlist_, String tag_)
 	{
 		id = id_;
 		tag = tag_;
 		nodeList = nlist_;
 	}
-	public HashSet<Nodes> getNodeList()
+	public List<Nodes> getNodeList()
 	{
 		return nodeList;
+	}
+	
+	public Nodes getNode(int i)
+	{
+		return nodeList.get(i);
+	}
+	public void addNode(Nodes n)
+	{
+		nodeList.add(n);
+
 	}
 	
 	
