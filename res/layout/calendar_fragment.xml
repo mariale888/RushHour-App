@@ -3,17 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-   android:layout_marginLeft="20dp"   >
+   android:layout_marginLeft="20dp"   xmlns:tools="http://schemas.android.com/tools" tools:context=".CalendarFragment">
 
     <TextView
         android:id="@+id/textView2"
+        android:textColor="#045268"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
         android:text="@+string/add_calendar"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/finalDesText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -23,23 +25,33 @@
 
         <requestFocus />
     </EditText>
+	
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="153dp"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal" >
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@+string/time_arrival"
-        android:inputType="time"
-        android:paddingTop="30dp" />
+        <TimePicker
+            android:id="@+id/arrivalText"
+            style="@style/AppTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:scaleX="0.8"
+            android:scaleY="0.8" />
 
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@+string/time_departure"
-        android:inputType="time" />
+        <TimePicker
+            android:id="@+id/timeDepText"
+            style="@style/AppTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:scaleX="0.8"
+            android:scaleY="0.8" />
+
+	 </LinearLayout>
+   
 
     <TextView
         android:id="@+id/textView1"
@@ -50,7 +62,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <SeekBar
-        android:id="@+id/seekBar1"
+        android:id="@+id/timeWindowBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="30"
@@ -58,10 +70,12 @@
         android:progress="15" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/addButton"
         style="@drawable/drawer_shadow"
         android:layout_width="98dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="20dp"
         android:text="@+string/add_button" />
 
 </LinearLayout>

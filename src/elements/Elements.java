@@ -2,25 +2,25 @@ package elements;
 
 public class Elements {
 
-	protected int id;
+	protected Long id;
 	protected String tag;
 	protected String role;
 	
 	public Elements()
 	{
-		id = 0;
+		id = (long) 0;
 		tag = "";
 		role = "";
 	}
 	
-	public Elements(int id_, String tag_)
+	public Elements(Long id_, String tag_)
 	{
 		id  = id_;
 		tag = tag_;
 		role = "";
 	}
 	
-	public int getId()
+	public Long getId()
 	{
 		return id;
 	}

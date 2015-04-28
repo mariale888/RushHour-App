@@ -1,27 +1,36 @@
 package com.example.rushhour;
 
+import java.util.concurrent.ExecutionException;
+import org.json.JSONArray;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationServices;
 
+import elements.Nodes;
+import elements.Ways;
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
+
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+
 
 /*
  * Main Fragment controls
@@ -30,8 +39,35 @@ import android.widget.TextView;
  * */
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, 
+        	LocationListener
+        {
 
+	public static FragmentManager fragmentManager;
+	public UserAgent user;
+	public static Double latitude, longitude;
+	
+	private String mLatitudeText;
+	private String mLongitudeText;
+	
+	//private GoogleApiClient mGoogleApiClient;
+	public static String MAP_TAG; 
+	private String QUERY;
+	
+	 private LocationManager locationManager;
+	 public Location location;
+	// flag for GPS Status
+	 boolean isGPSEnabled = false;
+	 // flag for network status
+	 boolean isNetworkEnabled = false;
+	 boolean canGetLocation = false;
+	 
+	// The minimum distance to change updates in meters
+	    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; 
+
+	    // The minimum time between updates in milliseconds
+	    private static final long MIN_TIME_BW_UPDATES = 5; 
+	
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -42,8 +78,7 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
-   
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,17 +86,189 @@ public class MainActivity extends ActionBarActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
-
-        new AsyncTaskRushHour().execute("SELECT * FROM nodes WHERE node_id = '34184938'");
         
+        mTitle    = getTitle();
+        MAP_TAG   = "CONNECT";
+        QUERY     = "QUERY";
+        latitude  = 40.4380673;
+	    longitude = -79.9229868;
+        
+	    user = UserAgent.getInstance();
+        buildGoogleListener();
+        
+  
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        
+        
+     // Initializing the object of the FragmentManager. Here I'm passing getSupportFragmentManager(). You can pass getFragmentManager() if you are coding for Android 3.0 or above.
+        fragmentManager = getSupportFragmentManager();
+      
     }
 
-    @Override
+
+    //------
+    // GOOGLE MAPS
+  
+	 protected synchronized void buildGoogleListener()
+	 {
+		 // getting location manager
+		 locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+	     if (locationManager == null) {
+	    	 Log.d(MAP_TAG, "Location Manager Not Available");
+	    	 return;
+	     }
+	       
+        // getting GPS status
+        isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        // getting network status
+        isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        // if no GPS or network provided
+        if (!isGPSEnabled && !isNetworkEnabled) {
+            Log.d(MAP_TAG,"no gps or network enable");
+        } 
+        else {
+        	this.canGetLocation = true;
+            // if GPS Enabled get lat/long using GPS Service
+            if (isGPSEnabled) {
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES,
+                        MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+
+                Log.d(MAP_TAG, "GPS Enabled");
+
+                location = locationManager
+                        .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location == null){
+                	 Log.d(MAP_TAG,"Location null");
+                }
+                if (location != null) {
+                	latitude  = location.getLatitude();
+                	longitude = location.getLongitude();
+                    Log.d(MAP_TAG,"Location Are GPS: " + latitude + ":" + longitude);
+                }
+            }
+
+            // First get location from Network Provider
+            if (isNetworkEnabled) {
+                if (location == null) {
+                    locationManager.requestLocationUpdates(
+                            LocationManager.NETWORK_PROVIDER,
+                            MIN_TIME_BW_UPDATES,
+                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+
+                    Log.d(MAP_TAG, "Network");
+
+                    if (locationManager != null) {
+                        location = locationManager
+                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        //updateGPSCoordinates();
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                        Log.d(MAP_TAG,"Location Are network" + latitude + ":" + longitude);
+                    }
+                }
+	        }
+	     }	
+        
+        // Set up query to google maps to get cur location node
+        setUpMapCurLocation();
+	 }
+	 
+	 public void updateGPSCoordinates(Location location) {
+	    if (location != null) {
+	        latitude      = location.getLatitude();
+	        longitude     = location.getLongitude();
+	        
+	        Log.d(MAP_TAG,latitude.toString() + " " + longitude.toString() );
+	    }
+	    else
+	        Log.d(MAP_TAG,"in update gps, no location");
+
+	}
+	 
+	 public void setUpMapCurLocation()
+	 {
+		 Log.d(MAP_TAG, "Connected google maps");
+		 mLatitudeText  = Double.toString(latitude).replace(".", "");
+	     mLongitudeText = Double.toString(longitude).replace(".", "");
+	       
+	     // String query = "SELECT * FROM nodes JOIN way_nodes ON way_nodes.way_id = '268548985' AND nodes.node_id = way_nodes.node_id";// AND nodes.node_id = '105013085'";
+	      // String query = "SELECT * FROM nodes JOIN tempTable ON tempTable.node_id = nodes.node_id LIMIT 200";
+	      String query = "SELECT * FROM nodes WHERE latitude LIKE '" + mLatitudeText.substring(0, mLatitudeText.length() - 1) + 
+	    		  "%' AND longitude LIKE '" + mLongitudeText.substring(0, mLongitudeText.length() - 2) + "%'";
+	     
+	      Log.d(MAP_TAG, query);
+	      
+	      // try to run initial query
+	      try {
+	    	  JSONArray rs = new AsyncTaskRushHour().execute(query).get();
+			  
+	    	  try {
+	    		 
+	    		  double min = Double.MAX_VALUE;
+	    		  Nodes finalN = new Nodes();
+	    		  Nodes newN = new Nodes();
+		    	  for(int n=0;n< rs.length();n++)
+		    	  {
+		    		// Nodes newN = new Nodes(rs.getJSONObject(n));
+		    		 newN.loadJSON(rs.getJSONObject(n));
+		    		 double distance = Math.pow((Double.parseDouble(mLatitudeText) -  newN.geIntCoordinates()[0]), 2) +
+		    				 Math.pow((Double.parseDouble(mLongitudeText) -  newN.geIntCoordinates()[1]), 2); 
+		    		 if(distance < min)
+		    		 {
+		    			 min = distance;
+		    			 finalN = newN;
+		    		 }
+		    	  }
+		    	  if(min != Double.MAX_VALUE) {
+		    		  user.setCurNode(finalN);
+		    		  user.finalWay.addNode(finalN);
+		    		  Log.d(MAP_TAG, "found init location ID"); 
+		    	  }
+		    	//Log.d(MAP_TAG, rs.getJSONObject(n).toString() );  
+		    	 //Log.d(MAP_TAG, Integer.toString(finalWay.getNodeList().size()) );
+	    	  }
+	    	  catch (Exception e) {
+	    		  e.printStackTrace();
+	    	  }
+	    	  Log.d(MAP_TAG, "json " + Integer.toString(rs.length())); 
+	    	 // Log.d(MAP_TAG, "way " + Integer.toString(finalWay.getNodeList().size())); 
+			
+		  } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		  } catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		  }
+	 }
+	 
+	// on location change save cur location	
+	 public void onLocationChanged(Location location) {
+		 this.location = location;
+		 Log.d(MAP_TAG," location change");
+		 updateGPSCoordinates(location);
+	 }
+
+	 public void onProviderDisabled(String provider) {}
+	        
+	 public void onProviderEnabled(String provider) {}
+	 
+	 @Override
+	 public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+	 
+        
+ 
+    //-----
+    // UI BARS
+	
+	
+	@Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -72,9 +279,7 @@ public class MainActivity extends ActionBarActivity
         	 HomeFragment fragment_h = new HomeFragment();
         	 fragmentManager.beginTransaction()
              .replace(R.id.container, fragment_h)
-             .commit();
-        	 
-      
+             .commit(); 
             break;
         case 1:
         	 mTitle = getString(R.string.title_section2);
@@ -82,15 +287,16 @@ public class MainActivity extends ActionBarActivity
         	 fragmentManager.beginTransaction()
              .replace(R.id.container, fragment_c)
              .commit();
-        	 
-        	 
             break;
         case 2:
+        	 mTitle = getString(R.string.title_section3);
+        	 MapViewFragment fragment_m = new MapViewFragment();
         	 fragmentManager.beginTransaction()
-             .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+             .replace(R.id.container, fragment_m)
              .commit();
             break;
-    }
+        }
+        
         Log.d("DEBUG", Integer.toString(position));
        
     }
@@ -109,6 +315,7 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+    
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -181,5 +388,9 @@ public class MainActivity extends ActionBarActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+
+	
+   
+     
 
 }
