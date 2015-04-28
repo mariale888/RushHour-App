@@ -30,6 +30,7 @@ public class HomeFragment extends Fragment {
 	  public TextView calendar;
 	  public TextView edit;
 	  private View v;
+	   
 	  
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,27 +53,36 @@ public class HomeFragment extends Fragment {
      */
     private void populate()
     {
-        String[] calendarNames = {"trip 1:", "trip 2:", "trip 3:"};
-        String[] t1calInfo = { "10:20am", "12:00am", "2:0Opm"};
- 
-        // Adding the rows for both tables
-        for(int i = 0; i < calendarNames.length; i++)
-          calendarRow(t1, calendarNames[i] , t1calInfo[i]);
-       
+    	UserAgent user = UserAgent.getInstance();
+    
+         for(int i=0;i< user.myTrips.size();i++)
+    	{
+        	  calendarRow(t1, user.myTrips.get(i).destinationStr, user.myTrips.get(i).getDepartureStr(), 
+        			  user.myTrips.get(i).getArrivalStr() );
+    	
+    	}
+       if(user.myTrips.size() == 0)
+       {
+    	   calendarRow(t1, "No Trips", "NAN", "NAN" );
+       }
+
     }
     
-    private void calendarRow(TableLayout table, String col1, String col2){
+    private void calendarRow(TableLayout table, String col1, String col2, String col3){
     	
     	TableRow newRow =  new TableRow(v.getContext());
          //Create text views to be added to the row.
         TextView txDir = new TextView(v.getContext());
         TextView tvDeparture = new TextView(v.getContext());
         TextView tvArrival = new TextView(v.getContext());
+        tvArrival.setPadding(45, 0, 0, 0);
        
+
         //Put the data into the text view by passing it to a user defined function createView()
         createView(newRow, txDir, col1);
         createView(newRow, tvDeparture, col2);
-        createView(newRow, tvArrival, col2);
+        createView(newRow, tvArrival, col3);
+      
         
         // button
         Button newButton = new Button(v.getContext());
@@ -87,6 +97,7 @@ public class HomeFragment extends Fragment {
     }
     private void createView(TableRow row, TextView txtV, String viewdata) {
     	txtV.setText(viewdata);
+    	
     	row.addView(txtV); // add TextView to row.
     }
        

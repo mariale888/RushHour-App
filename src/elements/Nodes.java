@@ -28,6 +28,12 @@ public class Nodes extends Elements {
 	
 	public Nodes(JSONObject obj)
 	{
+		
+		loadJSON(obj);
+	}
+	public void loadJSON(JSONObject obj)
+	{
+		
 		try {
 			id        = Long.parseLong( obj.get("node_id").toString() );
 			latitude_int  = Long.parseLong( obj.get("latitude").toString() );
@@ -47,8 +53,8 @@ public class Nodes extends Elements {
 			
             e.printStackTrace();
         }
-		
 	}
+	
 	public Nodes(Long id_, int latitude_, int longitude_, String tag_)
 	{
 		id = id_;

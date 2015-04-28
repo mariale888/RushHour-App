@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">RushHour</string>
+    <string name="app_name">BeatRush</string>
     <string name="title_section1">My Calendar</string>
     <string name="title_section2">Add Trip</string>
     <string name="title_section3">Map</string>
@@ -17,7 +17,7 @@
      <string name="name_trip">Trip:</string>
      <string name="departure_time">Departures:</string>
      <string name="arrival_time">Arrivals:</string>
-     <string name="edit_button">Edit/Remove</string>
+     <string name="edit_button">Edit</string>
 	 <string name="remove_button">Remove</string>
 	
    <!-- Add new event to calendar strings -->

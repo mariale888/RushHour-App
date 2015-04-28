@@ -36,6 +36,7 @@ public class MapViewFragment extends Fragment {
 	private static LatLng myLocation;
 	
 	public static String MAP_TAG;
+	public static UserAgent user;
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,8 +48,9 @@ public class MapViewFragment extends Fragment {
 	 
 		MAP_TAG = MainActivity.MAP_TAG;
 		
-	   setUpMapIfNeeded(); // For setting up the MapFragment
-
+	    setUpMapIfNeeded(); // For setting up the MapFragment
+	    user = UserAgent.getInstance();
+	   
 	    return view;
 
     }
@@ -98,9 +100,9 @@ public class MapViewFragment extends Fragment {
 	     .color(Color.RED));
 	    
 	    List<LatLng> points = line.getPoints();
-	    for(int i=0;i< MainActivity.finalWay.getNodeList().size() - 1;i++)
+	    for(int i=0;i< user.finalWay.getNodeList().size() - 1;i++)
 	    {
-	    	Nodes node  = MainActivity.finalWay.getNode(i);
+	    	Nodes node  = user.finalWay.getNode(i);
 	    	LatLng temp = new LatLng(node.getRealCoordinates()[0], node.getRealCoordinates()[1]);
 	    	points.add(temp);
 	    	//Log.d(MAP_TAG, Double.toString(temp.latitude));
@@ -111,7 +113,7 @@ public class MapViewFragment extends Fragment {
 	  line.setPoints(points) ; // adding all nodes in path
 	  
 	  // End node Marker in map
-	  Nodes node  = MainActivity.finalWay.getNode(MainActivity.finalWay.getNodeList().size() - 1);
+	  Nodes node  = user.finalWay.getNode(user.finalWay.getNodeList().size() - 1);
    	  LatLng temp = new LatLng(node.getRealCoordinates()[0], node.getRealCoordinates()[1]);
 	  mMap.addMarker(new MarkerOptions().position(new LatLng(temp.latitude, temp.longitude))
 			  .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
