@@ -1,6 +1,6 @@
-<<<<<<< HEAD
-import java.sql.Timestamp;
 package com.example.rushhour;
+
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -29,10 +29,7 @@ public class UserAgent {
     Timestamp time_window_start;
     Timestamp time_window_end;
 
-    UserAgent() {
-        ID = UUID.randomUUID();
-    }
-
+   
     float[] get_source_location() {
         float[] src_location = {src_lat, src_long};
         return src_location;
