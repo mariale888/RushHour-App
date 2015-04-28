@@ -92,8 +92,8 @@ public class CalendarFragment extends Fragment {
             	
             	// user trips
             	UserAgent user = UserAgent.getInstance();
-            	String departure = departureHour.toString() + "," + departureMinute.toString();
-            	String arrival   = arrivalHour.toString() + "," + arrivalMinute.toString();
+            	String departure = departureHour.toString() + ":" + departureMinute.toString();
+            	String arrival   = arrivalHour.toString() + ":" + arrivalMinute.toString();
             	// Getting coordinates from destination
             	
             	Geocoder coder = new Geocoder(v.getContext());

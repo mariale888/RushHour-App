@@ -40,8 +40,8 @@ public class Trips {
 	int[] getTime(String st)
 	{
 		int[] time = new int[2];
-		time[0] = Integer.parseInt(st.split(",")[0]);
-		time[1] = Integer.parseInt(st.split(",")[1]);
+		time[0] = Integer.parseInt(st.split(":")[0]);
+		time[1] = Integer.parseInt(st.split(":")[1]);
 		
 		return time;
 	}
