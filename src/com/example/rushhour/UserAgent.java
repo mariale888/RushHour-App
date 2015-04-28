@@ -1,4 +1,4 @@
-import java.time.LocalTime;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 public class UserAgent {
@@ -8,8 +8,8 @@ public class UserAgent {
     float src_long;
     float dest_lat;
     float dest_long;
-    LocalTime time_window_start;
-    LocalTime time_window_end;
+    Timestamp time_window_start;
+    Timestamp time_window_end;
 
     UserAgent()
     {
@@ -26,12 +26,12 @@ public class UserAgent {
         return dest_location;
     }
 
-    LocalTime[] get_time_window(){
-        LocalTime [] time_window = {time_window_start,time_window_end};
+    Timestamp[] get_time_window(){
+        Timestamp [] time_window = {time_window_start,time_window_end};
         return time_window;
     }
 
-    void set_time_window(LocalTime ts, LocalTime te){
+    void set_time_window(Timestamp ts, Timestamp te){
         time_window_start = ts;
         time_window_end = te;
     }
@@ -46,12 +46,13 @@ public class UserAgent {
         dest_long = dest_location[1];
     }
 
+    //Example usage
     public static void main(String[] args) {
     UserAgent u = new UserAgent();
         float [] loc1 = {40.43532f, -79.92160f};
         float [] loc2 = {40.44367f, -79.94362f};
-        LocalTime t1 = LocalTime.of(8,5,30);
-        LocalTime t2 = LocalTime.of(9,0,00);
+        Timestamp t1 = new Timestamp(2015,5,30,12,23,39,99);
+        Timestamp t2 = new Timestamp(2015,5,30,15,28,40,12);
 
         u.set_src_location(loc1);
         u.set_dest_location(loc2);
