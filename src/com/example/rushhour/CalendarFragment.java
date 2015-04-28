@@ -107,10 +107,11 @@ public class CalendarFragment extends Fragment {
                     	Toast.makeText(v.getContext(), "Destination not found!", Toast.LENGTH_SHORT).show();
             	        return;
             	    }
-            	    Address location = address.get(0);
-            	    location.getLatitude();
-            	    location.getLongitude();
-            	    Log.d(INPUT, "address "+  location.getLatitude() + " " +  location.getLongitude());
+            	    
+            	    // coordinates that Google Maps found of destinations
+            	    Address location = address.get(0);    
+            	   
+            	   Log.d(INPUT, "address "+  location.getLatitude() + " " +  location.getLongitude());
             	   String mLatitudeText  = Double.toString(location.getLatitude() ).replace(".", "");
             	   String mLongitudeText = Double.toString(location.getLongitude() ).replace(".", "");
            	       
@@ -123,13 +124,22 @@ public class CalendarFragment extends Fragment {
 	          	   try {
 	          		   JSONArray rs = new AsyncTaskRushHour().execute(query).get();	  
 	          	       try {
+	          	    	   
+	          	    	  int R = 6371;
 	          	    	  double min = Double.MAX_VALUE;
 	    	    		  Nodes finalN = new Nodes();
 	          	    	   for(int n = 0;n< rs.length(); n++)
 	          	    	   {
 	          	    		 Nodes newN = new Nodes(rs.getJSONObject(n));
-	    		    		 double distance = Math.pow((Double.parseDouble(mLatitudeText) -  newN.geIntCoordinates()[0]), 2) +
-	    		    				 Math.pow((Double.parseDouble(mLongitudeText) -  newN.geIntCoordinates()[1]), 2); 
+	    		    		 
+	          	    		double dLat = (newN.getRealCoordinates()[0] -  location.getLatitude()) * Math.PI / 180;
+	    		    		double dLon = (newN.getRealCoordinates()[1] -  location.getLatitude()) * Math.PI / 180;
+	    		    		double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+	    		    		          Math.cos(location.getLatitude() * Math.PI/180 ) * Math.cos( newN.getRealCoordinates()[0] * Math.PI/180 ) * 
+	    		    		          Math.sin(dLon/2) * Math.sin(dLon/2); 
+	    		    		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+	    		    		double distance = R * c;
+	    		    		
 	    		    		 if(distance < min)
 	    		    		 {
 	    		    			 min = distance;

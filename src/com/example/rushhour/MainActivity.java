@@ -198,8 +198,8 @@ public class MainActivity extends ActionBarActivity
 	       
 	     // String query = "SELECT * FROM nodes JOIN way_nodes ON way_nodes.way_id = '268548985' AND nodes.node_id = way_nodes.node_id";// AND nodes.node_id = '105013085'";
 	      // String query = "SELECT * FROM nodes JOIN tempTable ON tempTable.node_id = nodes.node_id LIMIT 200";
-	      String query = "SELECT * FROM nodes WHERE latitude LIKE '" + mLatitudeText.substring(0, mLatitudeText.length() - 3) + 
-	    		  "%' AND longitude LIKE '" + mLongitudeText.substring(0, mLongitudeText.length() - 3) + "%'";
+	      String query = "SELECT * FROM nodes WHERE latitude LIKE '" + mLatitudeText.substring(0, mLatitudeText.length() - 2) + 
+	    		  "%' AND longitude LIKE '" + mLongitudeText.substring(0, mLongitudeText.length() - 2) + "%'";
 	     
 	     
 	     String query1 ="select * from nodes where node_id = 924785121 or " +
@@ -245,17 +245,26 @@ public class MainActivity extends ActionBarActivity
 	    	  JSONArray rs = new AsyncTaskRushHour().execute(query).get();
 			  
 	    	  try {
-	    		 
+	    		
+	    		  int R = 6371;
 	    		  double min = Double.MAX_VALUE;
 	    		  Nodes finalN = new Nodes();
+	    		  
 	    		  //Nodes newN = new Nodes();
 		    	  for(int n=0;n< rs.length();n++)
 		    	  {
 		    		  Nodes newN = new Nodes();
 		    		// Nodes newN = new Nodes(rs.getJSONObject(n));
 		    		 newN.loadJSON(rs.getJSONObject(n));
-		    		 double distance = Math.pow((Double.parseDouble(mLatitudeText) -  newN.geIntCoordinates()[0]), 2) +
-		    				 Math.pow((Double.parseDouble(mLongitudeText) -  newN.geIntCoordinates()[1]), 2); 
+		    		 
+		    		double dLat = (newN.getRealCoordinates()[0] - latitude) * Math.PI / 180;
+		    		double dLon = (newN.getRealCoordinates()[1] - longitude) * Math.PI / 180;
+		    		double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+		    		          Math.cos( latitude*Math.PI/180 ) * Math.cos( newN.getRealCoordinates()[0] * Math.PI/180 ) * 
+		    		          Math.sin(dLon/2) * Math.sin(dLon/2); 
+		    		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+		    		double distance = R * c;
+		    		
 		    		 if(distance < min)
 		    		 {
 		    			 min = distance;
