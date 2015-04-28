@@ -198,9 +198,46 @@ public class MainActivity extends ActionBarActivity
 	       
 	     // String query = "SELECT * FROM nodes JOIN way_nodes ON way_nodes.way_id = '268548985' AND nodes.node_id = way_nodes.node_id";// AND nodes.node_id = '105013085'";
 	      // String query = "SELECT * FROM nodes JOIN tempTable ON tempTable.node_id = nodes.node_id LIMIT 200";
-	      String query = "SELECT * FROM nodes WHERE latitude LIKE '" + mLatitudeText.substring(0, mLatitudeText.length() - 1) + 
-	    		  "%' AND longitude LIKE '" + mLongitudeText.substring(0, mLongitudeText.length() - 2) + "%'";
+	      String query = "SELECT * FROM nodes WHERE latitude LIKE '" + mLatitudeText.substring(0, mLatitudeText.length() - 3) + 
+	    		  "%' AND longitude LIKE '" + mLongitudeText.substring(0, mLongitudeText.length() - 3) + "%'";
 	     
+	     
+	     String query1 ="select * from nodes where node_id = 924785121 or " +
+	     		"node_id =472546497 or " +
+	     		"node_id =472546570 or " +
+	     		"node_id =2766492995 or " +
+	     		"node_id =104683082 or " +
+	     		"node_id =3192430398 or " +
+	     		"node_id =302452261 or " +
+	     		"node_id =2766492996 or " +
+	     		"node_id =302759445 or " +
+	     		"node_id =302756874 or " +
+	     		"node_id =106098085 or " +
+	     		"node_id =302755545 or " +
+	     		"node_id =1705345498 or " +
+	     		"node_id =106098077 or " +
+	     		"node_id =303349589 or " +
+	     		"node_id =302979786 or " +
+	     		"node_id =270624664 or " +
+	     		"node_id =303189375 or " +
+	     		"node_id =270927856 or " +
+	     		"node_id =2967210791 or " +
+	     		"node_id =105057945 or " +
+	     		"node_id =2703812717 or " +
+	     		"node_id =269095128 or " +
+	     		"node_id =3382338896 or " +
+	     		"node_id =3382338895 or " +
+	     		"node_id =3382338894 or " +
+	     		"node_id =3382338893 or " +
+	     		"node_id =3382338900 or " +
+	     		"node_id =3382324192 or " +
+	     		"node_id =3382324191 or " +
+	     		"node_id =3382324190 or " +
+	     		"node_id =3382324189 or " +
+	     		"node_id =3382324188 or " +
+	     		"node_id =3382324187 or " +
+	     		"node_id =3382324186 or " +
+	     		"node_id =3382324185";
 	      Log.d(MAP_TAG, query);
 	      
 	      // try to run initial query
@@ -211,9 +248,10 @@ public class MainActivity extends ActionBarActivity
 	    		 
 	    		  double min = Double.MAX_VALUE;
 	    		  Nodes finalN = new Nodes();
-	    		  Nodes newN = new Nodes();
+	    		  //Nodes newN = new Nodes();
 		    	  for(int n=0;n< rs.length();n++)
 		    	  {
+		    		  Nodes newN = new Nodes();
 		    		// Nodes newN = new Nodes(rs.getJSONObject(n));
 		    		 newN.loadJSON(rs.getJSONObject(n));
 		    		 double distance = Math.pow((Double.parseDouble(mLatitudeText) -  newN.geIntCoordinates()[0]), 2) +
@@ -223,14 +261,15 @@ public class MainActivity extends ActionBarActivity
 		    			 min = distance;
 		    			 finalN = newN;
 		    		 }
+		    		 //user.finalWay.addNode(newN);
 		    	  }
 		    	  if(min != Double.MAX_VALUE) {
 		    		  user.setCurNode(finalN);
 		    		  user.finalWay.addNode(finalN);
-		    		  Log.d(MAP_TAG, "found init location ID"); 
+		    		 Log.d(MAP_TAG, "found init location ID " + finalN.getId() + " " + finalN.geIntCoordinates()); 
 		    	  }
 		    	//Log.d(MAP_TAG, rs.getJSONObject(n).toString() );  
-		    	 //Log.d(MAP_TAG, Integer.toString(finalWay.getNodeList().size()) );
+		    	 Log.d(MAP_TAG, Integer.toString(user.finalWay.getNodeList().size()) );
 	    	  }
 	    	  catch (Exception e) {
 	    		  e.printStackTrace();

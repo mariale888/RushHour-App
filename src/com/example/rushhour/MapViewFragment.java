@@ -36,7 +36,7 @@ public class MapViewFragment extends Fragment {
 	private static LatLng myLocation;
 	
 	public static String MAP_TAG;
-	public static UserAgent user;
+	
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +49,7 @@ public class MapViewFragment extends Fragment {
 		MAP_TAG = MainActivity.MAP_TAG;
 		
 	    setUpMapIfNeeded(); // For setting up the MapFragment
-	    user = UserAgent.getInstance();
+	  
 	   
 	    return view;
 
@@ -78,6 +78,7 @@ public class MapViewFragment extends Fragment {
 	
 	private static void setUpMap() {
 	   
+		UserAgent user = UserAgent.getInstance();
 		// For showing a move to my location button
 	    mMap.setMyLocationEnabled(true);       
         Location location = mMap.getMyLocation();
@@ -107,7 +108,9 @@ public class MapViewFragment extends Fragment {
 	    	points.add(temp);
 	    	//Log.d(MAP_TAG, Double.toString(temp.latitude));
 	    	//Log.d(MAP_TAG, Double.toString(temp.longitude));
-	
+	    	  mMap.addMarker(new MarkerOptions().position(new LatLng(temp.latitude, temp.longitude)).title("Current Location").snippet("")
+	 	    		 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+	 	    
 	    }
 	    
 	  line.setPoints(points) ; // adding all nodes in path
