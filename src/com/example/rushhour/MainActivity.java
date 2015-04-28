@@ -202,6 +202,9 @@ public class MainActivity extends ActionBarActivity
 	    		  "%' AND longitude LIKE '" + mLongitudeText.substring(0, mLongitudeText.length() - 2) + "%'";
 	     
 	     
+	      
+	      
+	      
 	     String query1 ="select * from nodes where node_id = 924785121 or " +
 	     		"node_id =472546497 or " +
 	     		"node_id =472546570 or " +
