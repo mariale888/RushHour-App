@@ -91,12 +91,13 @@ public class MapViewFragment extends Fragment {
         
         
         // Adding beginning Marker in map
-	    mMap.addMarker(new MarkerOptions().position(new LatLng(myLocation.latitude, myLocation.longitude)).title("Current Location").snippet("")
-	    		 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+	   // mMap.addMarker(new MarkerOptions().position(new LatLng(myLocation.latitude, myLocation.longitude)).title("Current Location").snippet("")
+	    //		 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
 	    
+        
 	    // line for rout
 	    Polyline line = mMap.addPolyline(new PolylineOptions()
-	     .add(myLocation)
+	    // .add(myLocation)
 	     .width(5)
 	     .color(Color.RED));
 	    
@@ -108,9 +109,10 @@ public class MapViewFragment extends Fragment {
 	    	points.add(temp);
 	    	//Log.d(MAP_TAG, Double.toString(temp.latitude));
 	    	//Log.d(MAP_TAG, Double.toString(temp.longitude));
+	    	if(i==0){
 	    	  mMap.addMarker(new MarkerOptions().position(new LatLng(temp.latitude, temp.longitude)).title("Current Location").snippet("")
 	 	    		 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-	 	    
+	    	}
 	    }
 	    
 	  line.setPoints(points) ; // adding all nodes in path

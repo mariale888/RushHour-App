@@ -1,6 +1,8 @@
 package com.example.rushhour;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -151,7 +153,43 @@ public class CalendarFragment extends Fragment {
 	          	    		   user.myTrips.add(new Trips(destination,finalN, departure,arrival, timeW));
 	          	    		   Log.d(INPUT, "added new trip  " + finalN.getId() + " origin " + user.getCurnNode().getId() );
 	          	    		   
-	          	    	   }
+	          	    		   // call A*:
+		          	    	 ArrayList<Long> path = astar.executeAstar(1706009163, 105143789);
+	          	    		// ArrayList<Long> path = astar.executeAstar(user.getCurnNode().getId(), finalN.getId() );
+	          	    		 String query1 = "SELECT * FROM nodes WHERE ";
+	          	    			for(int i=0; i<path.size(); i++){
+	          	    				
+	          	    				//System.out.println(path.get(i));
+	          	    				query1 += "node_id = "+ path.get(i) ;
+	          	    				if(i +1 != path.size()) query1 += " or ";
+	
+	          	    			}
+	          	    			query1 +=";";
+	          	    			Log.d(INPUT, query1);
+	          	    			
+	          	    		  // try to run initial query
+	          	    	    	 JSONArray rs_ = new AsyncTaskRushHour().execute(query1).get(); 
+	          	    	    	  try {
+	          	    	    		  
+	          	    	    		HashMap<Long, Nodes> tempL = new HashMap<Long, Nodes>();
+	          	    	    		 for(int n = 0;n< rs_.length(); n++)
+	      	          	    	   	 {
+	          	    	    			 Nodes newN = new Nodes(rs_.getJSONObject(n));
+	          	    	    			 //user.finalWay.addNode(newN);
+	          	    	    			 tempL.put(newN.getId(), newN);
+	      	          	    	   	 }
+	          	    	    		 
+	          	    	    		for(int i=0; i<path.size(); i++){
+	           	    	    			Nodes newN = (Nodes) tempL.get(path.get(i));
+	          	    	    			user.finalWay.addNode(newN);
+	          	    	    		}
+	          	    	    		 
+	          	    	    	  }
+	          	    	    	  catch (Exception e) {
+	          	 	    		    e.printStackTrace();
+	          	    	    	  }
+	          	    	      }
+	          	    			
 	          		    	 Log.d(INPUT, Integer.toString(rs.length()) );
 	          	       }
 	          	       catch (Exception e) {

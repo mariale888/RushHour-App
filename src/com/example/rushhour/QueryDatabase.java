@@ -16,7 +16,7 @@ public class QueryDatabase
     	JSONArray resultSet = new JSONArray();
     	 
 		Class.forName("com.mysql.jdbc.Driver").newInstance();	
-		Connection connection = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/rushHour", "root", "");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/newRushHour", "root", "");
 	        Statement statement = connection.createStatement();
 	        ResultSet result = statement.executeQuery(query);
 	

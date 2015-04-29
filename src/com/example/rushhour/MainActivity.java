@@ -277,8 +277,8 @@ public class MainActivity extends ActionBarActivity
 		    	  }
 		    	  if(min != Double.MAX_VALUE) {
 		    		  user.setCurNode(finalN);
-		    		  user.finalWay.addNode(finalN);
-		    		 Log.d(MAP_TAG, "found init location ID " + finalN.getId() + " " + finalN.geIntCoordinates()); 
+		    		  //user.finalWay.addNode(finalN);
+		    		 Log.d(MAP_TAG, "found init location ID " + finalN.getId());// + " " + finalN.geIntCoordinates()); 
 		    	  }
 		    	//Log.d(MAP_TAG, rs.getJSONObject(n).toString() );  
 		    	 Log.d(MAP_TAG, Integer.toString(user.finalWay.getNodeList().size()) );

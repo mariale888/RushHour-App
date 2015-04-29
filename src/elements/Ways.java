@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Ways extends Elements {
 
-	private List<Nodes> nodeList;
+	private ArrayList<Nodes> nodeList;
 	
 	// Constructors and getters.
 	public Ways(){
@@ -14,13 +14,13 @@ public class Ways extends Elements {
 		tag = "";
 		nodeList = new ArrayList<Nodes>();
 	}
-	public Ways(Long id_, List<Nodes> nlist_, String tag_)
+	public Ways(Long id_, ArrayList<Nodes> nlist_, String tag_)
 	{
 		id = id_;
 		tag = tag_;
 		nodeList = nlist_;
 	}
-	public List<Nodes> getNodeList()
+	public ArrayList<Nodes> getNodeList()
 	{
 		return nodeList;
 	}

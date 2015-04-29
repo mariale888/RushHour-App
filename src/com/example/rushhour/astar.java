@@ -1,3 +1,5 @@
+package com.example.rushhour;
+
 /* 
  * In the commented out main function, check the dummy values for which this works! It won't work for 
  * every pair of nodes, because the nodes in the database are not fully tagged, and the algorithm will get 
@@ -6,42 +8,127 @@
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.sql.*;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class astar
 {
 	public static ArrayList<Long> getNeighbors(long currentNode) throws SQLException, ClassNotFoundException
 	{
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/rushHour", "root", "1234");
-		Statement st = con.createStatement();
-		ResultSet rs = st.executeQuery("select * from pathTable where start_node_id = " + currentNode);
+		//Class.forName("com.mysql.jdbc.Driver");
+		//Connection con = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/newRushHour", "root", "");
+		//Statement st = con.createStatement();
+		//ResultSet rs = st.executeQuery("select * from pathTable where start_node_id = " + currentNode);
 		ArrayList<Long> neighbors = new ArrayList<Long>();
-		while(rs.next())
-		{
-			long temp = rs.getLong("end_node_id");
-			neighbors.add(temp);
-		}
-		rs.close();
-		st.close();
-		con.close();
-
+		//while(rs.next())
+		//{
+		//	long temp = rs.getLong("end_node_id");
+		//	neighbors.add(temp);
+		//}
+		//rs.close();
+		//st.close();
+		//con.close();
+		String query = "select * from pathTable where start_node_id = " + currentNode  + ";";
+		
+		try {
+			JSONArray rs = new AsyncTaskRushHour().execute(query).get();
+			for(int n=0;n< rs.length();n++) {
+				JSONObject obj;
+				try {
+					obj = rs.getJSONObject(n);
+					long temp = Long.parseLong( obj.get("end_node_id").toString() );
+					neighbors.add(temp);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ExecutionException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
+		
+		
 		return neighbors;
 	}
 
 	public static double getDistance(long node1, long node2) throws SQLException, ClassNotFoundException
 	{
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection con = DriverManager.getConnection("jdbc:mysql://localhost/rushHour", "root", "1234");
-		Statement st = con.createStatement();
-		Statement st1 = con.createStatement();
-		ResultSet rs1 = st.executeQuery("select * from nodes where node_id = " + node1);
-		ResultSet rs2 = st1.executeQuery("select * from nodes where node_id = " + node2);
+		//Class.forName("com.mysql.jdbc.Driver");
+		//Connection con = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/newRushHour", "root", "");
+		//Statement st = con.createStatement();
+		//Statement st1 = con.createStatement();
+		//ResultSet rs1 = st.executeQuery("select * from nodes where node_id = " + node1);
+		//ResultSet rs2 = st1.executeQuery("select * from nodes where node_id = " + node2);
+		
 		double lat1 = 0.0;
 		double long1 = 0.0;
 		double lat2 = 0.0;
 		double long2 = 0.0;
-
+		double distance = 0;
+		
+		String query = "select * from nodes where node_id = " + node1  + ";";
+		String query1 = "select * from nodes where node_id = " + node2  + ";";
+		
+		try {
+			JSONArray rs = new AsyncTaskRushHour().execute(query).get();
+			JSONArray rs1 = new AsyncTaskRushHour().execute(query1).get();
+			// first query
+			for(int n=0;n< rs.length();n++) {
+				JSONObject obj;
+				try {
+					obj = rs.getJSONObject(n);
+					lat1 = Long.parseLong( obj.get("latitude").toString() )/1E7;
+					long1 = Long.parseLong( obj.get("longitude").toString() )/1E7;
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			//second query
+			for(int n=0;n< rs1.length();n++) {
+				JSONObject obj;
+				try {
+					obj   = rs1.getJSONObject(n);
+					lat2  = Long.parseLong( obj.get("latitude").toString() )/1E7;
+					long2 = Long.parseLong( obj.get("longitude").toString() )/1E7;
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			
+		
+			int R = 6371; // km Radius of earth
+			double dLat = Math.toRadians(lat2 - lat1);
+			double dLon = Math.toRadians(long2 - long1);
+			 
+			double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2); 
+			double c = 2 * Math.asin(Math.sqrt(a)); 
+			distance = R * c;
+	
+			
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ExecutionException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
+		
+		
+		
+		
+		/*
 		if(rs1.next())
 		{
 		lat1 = rs1.getLong("latitude")/1E7;
@@ -51,21 +138,12 @@ public class astar
 		{
 		lat2 = rs2.getLong("latitude")/1E7;
 		long2 = rs2.getLong("longitude")/1E7;
-		}
-		
-		int R = 6371; // km Radius of earth
-		double dLat = Math.toRadians(lat2 - lat1);
-		double dLon = Math.toRadians(long2 - long1);
-		 
-		double a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2); 
-		double c = 2 * Math.asin(Math.sqrt(a)); 
-		double distance = R * c;
-
-		rs2.close();
-		rs1.close();
-		st1.close();
-		st.close();
-		con.close();
+		}*/
+		//rs2.close();
+		//rs1.close();
+		//st1.close();
+		//st.close();
+		//con.close();
 
 		return distance;
 	}
@@ -91,18 +169,44 @@ public class astar
 					continue;
 				}
 
-				Class.forName("com.mysql.jdbc.Driver");
-				Connection con = DriverManager.getConnection("jdbc:mysql://localhost/rushHour", "root", "1234");
+				/*Class.forName("com.mysql.jdbc.Driver");
+				Connection con = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/newRushHour", "root", "");
 				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery("select * from node_tags where node_id = " + node);
-				String tag = "";
+				
 				if(rs.next())
 				{
 					tag = rs.getString("v");
 				}
 				rs.close();
 				st.close();
-				con.close();
+				con.close();*/
+				String query = "select * from node_tags where node_id = " + node  + ";";
+				String tag = "";
+				try {
+					JSONArray rs = new AsyncTaskRushHour().execute(query).get();
+					for(int n=0;n< rs.length();n++) {
+						JSONObject obj;
+						try {
+							obj = rs.getJSONObject(n);
+							tag = obj.get("v").toString() ;
+							
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (ExecutionException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} 
+				
+
+				
 				if(tag.equals("parking") || tag.equals("deadend") || tag.equals("building") || tag.equals("pedestrian"))
 				{
 					continue;
