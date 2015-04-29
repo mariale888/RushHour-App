@@ -1,3 +1,9 @@
+/* 
+ * In the commented out main function, check the dummy values for which this works! It won't work for 
+ * every pair of nodes, because the nodes in the database are not fully tagged, and the algorithm will get 
+ * stuck if other pairs are run!
+ */
+
 import java.io.*;
 import java.util.*;
 import java.sql.*;
